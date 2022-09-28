@@ -6,11 +6,17 @@ class AuthorsController < ApplicationController
     render json: author
   end
 
-  def create
-    author = Author.create(author_params)
+  # Authors POST /authors with invalid author params returns the error messages
 
-    render json: author, status: :created
+  def create
+    author = Author.new(author_params)
+    if author && author.save
+      render json: author, status: :created
+    else
+      render json: { errors: author.errors }, status: :unprocessable_entity
+    end
   end
+
 
   private
   
